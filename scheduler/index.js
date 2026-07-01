@@ -3,7 +3,9 @@ const dailyBriefing = require('./dailyBriefing');
 const reminder = require('./reminder');
 const cleanup = require('./cleanup');
 const { saveWeatherAlerts } = require('../services/weatherService');
+const backupService = require('../services/backupService');
 const Farm = require('../models/client/Farm');
+const SystemConfig = require('../models/admin/SystemConfig');
 const logger = require('../utils/logger');
 
 const initializeScheduler = () => {
@@ -34,7 +36,6 @@ const initializeScheduler = () => {
   });
 
   cron.schedule('0 * * * *', async () => {
-    logger.info('[Scheduler] Checking weather alerts');
     try {
       const farms = await Farm.find({ status: 'active' });
       for (const farm of farms) {
@@ -42,9 +43,39 @@ const initializeScheduler = () => {
           await saveWeatherAlerts(farm._id, farm.location);
         }
       }
-      logger.info('[Scheduler] Weather alerts checked');
     } catch (error) {
       logger.error('[Scheduler] Weather alert check failed', { error: error.message });
+    }
+  }, {
+    timezone: 'Africa/Nairobi',
+  });
+
+  cron.schedule('0 2 * * *', async () => {
+    logger.info('[Scheduler] Starting auto backup check');
+    try {
+      const config = await SystemConfig.findOne({ key: 'backupConfig' });
+      const frequency = config?.value?.frequency || 'none';
+      const today = new Date();
+      const dayOfWeek = today.getDay();
+      const dayOfMonth = today.getDate();
+
+      let shouldRun = false;
+      if (frequency === 'daily') shouldRun = true;
+      if (frequency === 'weekly' && dayOfWeek === 0) shouldRun = true;
+      if (frequency === 'monthly' && dayOfMonth === 1) shouldRun = true;
+
+      if (shouldRun) {
+        const backup = await backupService.createBackup();
+        await backupService.cleanupOldBackups(config?.value?.maxFiles || 30);
+
+        if (config?.value?.autoEmail && config?.value?.email) {
+          await backupService.sendBackupEmail(backup.filename, config.value.email);
+        }
+
+        logger.info('[Scheduler] Auto backup completed', { filename: backup.filename });
+      }
+    } catch (error) {
+      logger.error('[Scheduler] Auto backup failed', { error: error.message });
     }
   }, {
     timezone: 'Africa/Nairobi',
