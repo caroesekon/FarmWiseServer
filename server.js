@@ -13,6 +13,21 @@ const logger = require('./utils/logger');
 
 const app = express();
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  
+  res.header('Access-Control-Allow-Origin', origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
 let redis = null;
 if (process.env.REDIS_ENABLED === 'true') {
   redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
@@ -33,18 +48,6 @@ connectDB();
 mongoose.connection.setMaxListeners(20);
 
 app.set('trust proxy', 1);
-
-const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000').split(',');
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-}));
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
