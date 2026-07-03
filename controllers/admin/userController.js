@@ -38,11 +38,13 @@ const getUsers = async (req, res) => {
 
     const usersWithFarms = await Promise.all(
       users.map(async (user) => {
-        const farm = await Farm.findOne({ owner: user._id }).select('name location');
+        const farm = await Farm.findOne({ owner: user._id }).select('name location trialStatus trialEndsAt');
         return {
           ...user.toObject(),
           farmName: farm?.name || 'No farm',
           farmLocation: farm?.location || null,
+          trialStatus: farm?.trialStatus || 'none',
+          trialEndsAt: farm?.trialEndsAt || null,
         };
       })
     );
@@ -81,7 +83,7 @@ const getUser = async (req, res) => {
       });
     }
 
-    const farm = await Farm.findOne({ owner: user._id }).select('name location size sizeUnit livestock crops status');
+    const farm = await Farm.findOne({ owner: user._id }).select('name location size sizeUnit livestock crops status trialStatus trialStartsAt trialEndsAt');
 
     res.status(200).json({
       success: true,
@@ -104,7 +106,7 @@ const getUser = async (req, res) => {
 // @access  Private (admin)
 const createUser = async (req, res) => {
   try {
-    const { name, email, phone, farmName, county, subCounty } = req.body;
+    const { name, email, phone, farmName, county, subCounty, trial } = req.body;
 
     if (!name || !farmName || !county) {
       return res.status(400).json({
@@ -162,13 +164,22 @@ const createUser = async (req, res) => {
       },
     });
 
+    if (trial) {
+      const trialDays = parseInt(trial) || 14;
+      farm.trialStatus = 'trial';
+      farm.trialStartsAt = new Date();
+      farm.trialEndsAt = new Date(Date.now() + trialDays * 24 * 60 * 60 * 1000);
+    } else {
+      farm.trialStatus = 'active';
+    }
+
+    await farm.save();
+
     user.farmId = farm._id;
     await user.save();
 
-    let emailResult = { sent: false, error: null };
-
     if (user.email) {
-      emailResult = await emailService.send({
+      await emailService.send({
         to: user.email,
         template: 'welcomeVerify',
         data: {
@@ -177,21 +188,18 @@ const createUser = async (req, res) => {
           farmName: farm.name,
           password,
           loginUrl: process.env.CLIENT_URL,
+          trial: farm.trialStatus === 'trial' ? {
+            days: Math.ceil((new Date(farm.trialEndsAt) - new Date()) / (1000 * 60 * 60 * 24)),
+            endsAt: farm.trialEndsAt,
+          } : null,
         },
       });
-
-      if (!emailResult.success) {
-        logger.error('[Admin] Welcome email failed', {
-          userId: user._id,
-          email: user.email,
-          error: emailResult.error,
-        });
-      }
     }
 
     logger.info('[Admin] Created farm admin', {
       userId: user._id,
       farmId: farm._id,
+      trial: farm.trialStatus,
     });
 
     res.status(201).json({
@@ -209,13 +217,10 @@ const createUser = async (req, res) => {
         farm: {
           id: farm._id,
           name: farm.name,
+          trialStatus: farm.trialStatus,
+          trialEndsAt: farm.trialEndsAt,
         },
         tempPassword: password,
-        email: {
-          sent: emailResult.success,
-          error: emailResult.error || null,
-          messageId: emailResult.messageId || null,
-        },
       },
     });
   } catch (error) {
@@ -297,10 +302,8 @@ const resetPassword = async (req, res) => {
     user.password = newPassword;
     await user.save();
 
-    let emailResult = { sent: false, error: null };
-
     if (user.email) {
-      emailResult = await emailService.send({
+      await emailService.send({
         to: user.email,
         template: 'passwordReset',
         data: {
@@ -318,11 +321,6 @@ const resetPassword = async (req, res) => {
       message: 'Password reset successfully.',
       data: {
         tempPassword: newPassword,
-        email: {
-          sent: emailResult.success,
-          error: emailResult.error || null,
-          messageId: emailResult.messageId || null,
-        },
       },
     });
   } catch (error) {
@@ -442,6 +440,189 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// @desc    Start trial for farm admin
+// @route   POST /api/admin/users/:id/trial
+// @access  Private (admin)
+const startTrial = async (req, res) => {
+  try {
+    const { days = 14 } = req.body;
+
+    const user = await User.findOne({
+      _id: req.params.id,
+      role: 'farmAdmin',
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+      });
+    }
+
+    const farm = await Farm.findOne({ owner: user._id });
+
+    if (!farm) {
+      return res.status(404).json({
+        success: false,
+        message: 'Farm not found.',
+      });
+    }
+
+    farm.trialStatus = 'trial';
+    farm.trialStartsAt = new Date();
+    farm.trialEndsAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    farm.updatedAt = new Date();
+    await farm.save();
+
+    logger.info('[Admin] Trial started', {
+      userId: user._id,
+      farmId: farm._id,
+      days,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Trial started for ${days} days.`,
+      data: {
+        trialStatus: farm.trialStatus,
+        trialStartsAt: farm.trialStartsAt,
+        trialEndsAt: farm.trialEndsAt,
+        daysRemaining: days,
+      },
+    });
+  } catch (error) {
+    logger.error('[Admin] Start trial failed', { error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to start trial.',
+    });
+  }
+};
+
+// @desc    Extend trial for farm admin
+// @route   POST /api/admin/users/:id/trial/extend
+// @access  Private (admin)
+const extendTrial = async (req, res) => {
+  try {
+    const { days = 7 } = req.body;
+
+    const user = await User.findOne({
+      _id: req.params.id,
+      role: 'farmAdmin',
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+      });
+    }
+
+    const farm = await Farm.findOne({ owner: user._id });
+
+    if (!farm) {
+      return res.status(404).json({
+        success: false,
+        message: 'Farm not found.',
+      });
+    }
+
+    if (farm.trialStatus === 'expired') {
+      farm.trialStatus = 'trial';
+      farm.trialStartsAt = new Date();
+      farm.trialEndsAt = new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+    } else {
+      const currentEnd = farm.trialEndsAt ? new Date(farm.trialEndsAt) : new Date();
+      farm.trialEndsAt = new Date(currentEnd.getTime() + days * 24 * 60 * 60 * 1000);
+      if (farm.trialStatus === 'none') {
+        farm.trialStatus = 'trial';
+        farm.trialStartsAt = new Date();
+      }
+    }
+
+    farm.updatedAt = new Date();
+    await farm.save();
+
+    const daysRemaining = Math.ceil((new Date(farm.trialEndsAt) - new Date()) / (1000 * 60 * 60 * 24));
+
+    logger.info('[Admin] Trial extended', {
+      userId: user._id,
+      farmId: farm._id,
+      days,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Trial extended by ${days} days.`,
+      data: {
+        trialStatus: farm.trialStatus,
+        trialStartsAt: farm.trialStartsAt,
+        trialEndsAt: farm.trialEndsAt,
+        daysRemaining: Math.max(0, daysRemaining),
+      },
+    });
+  } catch (error) {
+    logger.error('[Admin] Extend trial failed', { error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to extend trial.',
+    });
+  }
+};
+
+// @desc    Convert trial to full access
+// @route   POST /api/admin/users/:id/convert
+// @access  Private (admin)
+const convertToFull = async (req, res) => {
+  try {
+    const user = await User.findOne({
+      _id: req.params.id,
+      role: 'farmAdmin',
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found.',
+      });
+    }
+
+    const farm = await Farm.findOne({ owner: user._id });
+
+    if (!farm) {
+      return res.status(404).json({
+        success: false,
+        message: 'Farm not found.',
+      });
+    }
+
+    farm.trialStatus = 'active';
+    farm.trialStartsAt = null;
+    farm.trialEndsAt = null;
+    farm.updatedAt = new Date();
+    await farm.save();
+
+    logger.info('[Admin] Converted to full access', {
+      userId: user._id,
+      farmId: farm._id,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Converted to full access.',
+      data: {
+        trialStatus: farm.trialStatus,
+      },
+    });
+  } catch (error) {
+    logger.error('[Admin] Convert failed', { error: error.message });
+    res.status(500).json({
+      success: false,
+      message: 'Failed to convert.',
+    });
+  }
+};
+
 module.exports = {
   getUsers,
   getUser,
@@ -451,4 +632,7 @@ module.exports = {
   suspendUser,
   activateUser,
   deleteUser,
+  startTrial,
+  extendTrial,
+  convertToFull,
 };

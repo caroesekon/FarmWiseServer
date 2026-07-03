@@ -56,6 +56,17 @@ const farmSchema = new mongoose.Schema({
     enum: ['active', 'inactive', 'suspended'],
     default: 'active',
   },
+  trialStatus: {
+    type: String,
+    enum: ['none', 'trial', 'active', 'expired'],
+    default: 'none',
+  },
+  trialStartsAt: {
+    type: Date,
+  },
+  trialEndsAt: {
+    type: Date,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -68,5 +79,6 @@ const farmSchema = new mongoose.Schema({
 
 farmSchema.index({ owner: 1 });
 farmSchema.index({ status: 1 });
+farmSchema.index({ trialStatus: 1 });
 
 module.exports = mongoose.model('Farm', farmSchema);

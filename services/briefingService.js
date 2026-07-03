@@ -48,42 +48,49 @@ const compileBriefing = async (farm) => {
       dueDate: v.dueDate,
     }));
 
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-
-    const yesterdayStart = new Date(todayStart);
+    const yesterdayStart = new Date();
     yesterdayStart.setDate(yesterdayStart.getDate() - 1);
+    yesterdayStart.setHours(0, 0, 0, 0);
 
-    const todayProduction = await Production.find({
-      farmId: farm._id,
-      date: { $gte: todayStart },
-    });
+    const yesterdayEnd = new Date(yesterdayStart);
+    yesterdayEnd.setHours(23, 59, 59, 999);
+
+    const dayBeforeStart = new Date(yesterdayStart);
+    dayBeforeStart.setDate(dayBeforeStart.getDate() - 1);
+
+    const dayBeforeEnd = new Date(dayBeforeStart);
+    dayBeforeEnd.setHours(23, 59, 59, 999);
 
     const yesterdayProduction = await Production.find({
       farmId: farm._id,
-      date: { $gte: yesterdayStart, $lt: todayStart },
+      date: { $gte: yesterdayStart, $lte: yesterdayEnd },
     });
 
-    const todayMilk = todayProduction
-      .filter((p) => p.type === 'milk')
-      .reduce((sum, p) => sum + p.quantity, 0);
+    const dayBeforeProduction = await Production.find({
+      farmId: farm._id,
+      date: { $gte: dayBeforeStart, $lte: dayBeforeEnd },
+    });
 
     const yesterdayMilk = yesterdayProduction
       .filter((p) => p.type === 'milk')
       .reduce((sum, p) => sum + p.quantity, 0);
 
-    const todayEggs = todayProduction
-      .filter((p) => p.type === 'eggs')
+    const dayBeforeMilk = dayBeforeProduction
+      .filter((p) => p.type === 'milk')
       .reduce((sum, p) => sum + p.quantity, 0);
 
     const yesterdayEggs = yesterdayProduction
       .filter((p) => p.type === 'eggs')
       .reduce((sum, p) => sum + p.quantity, 0);
 
+    const dayBeforeEggs = dayBeforeProduction
+      .filter((p) => p.type === 'eggs')
+      .reduce((sum, p) => sum + p.quantity, 0);
+
     return {
       farmId: farm._id,
       farmName: farm.name,
-      date: new Date().toLocaleDateString('en-KE', {
+      date: yesterdayStart.toLocaleDateString('en-KE', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -94,17 +101,17 @@ const compileBriefing = async (farm) => {
       upcoming: [...upcomingAlerts, ...vaccinationReminders].slice(0, 10),
       snapshot: {
         milk: {
-          today: todayMilk,
           yesterday: yesterdayMilk,
-          change: yesterdayMilk > 0
-            ? (((todayMilk - yesterdayMilk) / yesterdayMilk) * 100).toFixed(1)
+          dayBefore: dayBeforeMilk,
+          change: dayBeforeMilk > 0
+            ? (((yesterdayMilk - dayBeforeMilk) / dayBeforeMilk) * 100).toFixed(1)
             : '0',
         },
         eggs: {
-          today: todayEggs,
           yesterday: yesterdayEggs,
-          change: yesterdayEggs > 0
-            ? (((todayEggs - yesterdayEggs) / yesterdayEggs) * 100).toFixed(1)
+          dayBefore: dayBeforeEggs,
+          change: dayBeforeEggs > 0
+            ? (((yesterdayEggs - dayBeforeEggs) / dayBeforeEggs) * 100).toFixed(1)
             : '0',
         },
       },

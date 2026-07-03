@@ -11,7 +11,7 @@ const logger = require('../utils/logger');
 const initializeScheduler = () => {
   logger.info('[Scheduler] Initializing cron jobs');
 
-  cron.schedule('0 4 * * *', async () => {
+  cron.schedule('0 6 * * *', async () => {
     logger.info('[Scheduler] Starting daily briefing');
     try {
       await dailyBriefing.run();
@@ -23,7 +23,7 @@ const initializeScheduler = () => {
     timezone: 'Africa/Nairobi',
   });
 
-  cron.schedule('0 4 * * *', async () => {
+  cron.schedule('0 6 * * *', async () => {
     logger.info('[Scheduler] Starting reminder check');
     try {
       await reminder.run();
@@ -45,6 +45,28 @@ const initializeScheduler = () => {
       }
     } catch (error) {
       logger.error('[Scheduler] Weather alert check failed', { error: error.message });
+    }
+  }, {
+    timezone: 'Africa/Nairobi',
+  });
+
+  cron.schedule('0 1 * * *', async () => {
+    try {
+      const result = await Farm.updateMany(
+        {
+          trialStatus: 'trial',
+          trialEndsAt: { $lt: new Date() },
+        },
+        {
+          trialStatus: 'expired',
+          updatedAt: new Date(),
+        }
+      );
+      if (result.modifiedCount > 0) {
+        logger.info(`[Scheduler] Expired ${result.modifiedCount} trial(s)`);
+      }
+    } catch (error) {
+      logger.error('[Scheduler] Trial expiry check failed', { error: error.message });
     }
   }, {
     timezone: 'Africa/Nairobi',

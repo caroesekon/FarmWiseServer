@@ -109,6 +109,30 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.get('/api/support', async (req, res) => {
+  try {
+    const SystemConfig = require('./models/admin/SystemConfig');
+    
+    const [supportPhone, supportEmail, supportInfo] = await Promise.all([
+      SystemConfig.findOne({ key: 'supportPhone' }),
+      SystemConfig.findOne({ key: 'supportEmail' }),
+      SystemConfig.findOne({ key: 'supportInfo' }),
+    ]);
+
+    const phone = supportInfo?.value?.phone || supportPhone?.value || '';
+    const email = supportInfo?.value?.email || supportEmail?.value || '';
+
+    res.status(200).json({
+      success: true,
+      data: { phone, email },
+    });
+  } catch (error) {
+    res.status(200).json({
+      success: true,
+      data: { phone: '', email: '' },
+    });
+  }
+});
 app.use('/api/admin', require('./routes/admin/index'));
 app.use('/api', require('./routes/client/index'));
 

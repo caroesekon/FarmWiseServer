@@ -10,7 +10,6 @@ const wrap = (content) => `
     body { margin: 0; padding: 0; background-color: #f5f7f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .header { background-color: #1b5e20; padding: 32px 24px; text-align: center; }
-    .header img { width: 48px; height: 48px; margin-bottom: 12px; }
     .header h1 { color: #ffffff; margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -0.3px; }
     .header p { color: #a5d6a7; margin: 6px 0 0; font-size: 14px; }
     .body { padding: 32px 24px; color: #333333; }
@@ -24,7 +23,6 @@ const wrap = (content) => `
     .card.medium { border-left-color: #fbc02d; background-color: #fffef5; }
     .card.info { border-left-color: #1976d2; background-color: #f5f9ff; }
     .btn { display: inline-block; background-color: #1b5e20; color: #ffffff; padding: 12px 28px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 15px; margin-top: 8px; }
-    .btn:hover { background-color: #2e7d32; }
     .footer { background-color: #f5f7f5; padding: 20px 24px; text-align: center; border-top: 1px solid #e0e0e0; }
     .footer p { margin: 0; font-size: 12px; color: #999999; line-height: 1.5; }
     .footer a { color: #1b5e20; text-decoration: none; }
@@ -102,13 +100,11 @@ const templates = {
     html: wrap(`
       <h2>Welcome, ${data.name}! 👋</h2>
       <p>Your FarmWise account has been created and your farm <strong>${data.farmName}</strong> is ready.</p>
-
       <div class="card">
         <p style="margin:0;"><strong>Your Login Details</strong></p>
         <p style="margin:8px 0 0;">Email: <strong>${data.email}</strong></p>
         <p style="margin:4px 0 0;">Password: <strong>${data.password}</strong></p>
       </div>
-
       <p style="margin-top:16px;">Please change your password after your first login.</p>
       <a href="${data.loginUrl || process.env.CLIENT_URL}" class="btn">Go to Dashboard</a>
       <p style="margin-top:20px; font-size:14px; color:#666;">Download the mobile app for on-the-go access to your farm.</p>
@@ -121,12 +117,10 @@ const templates = {
       <h2>Password Reset</h2>
       <p>Hello ${data.name},</p>
       <p>You requested a password reset for your FarmWise account.</p>
-
       <div class="card">
         <p style="margin:0;"><strong>Your New Password</strong></p>
         <p style="margin:8px 0 0; font-size:18px; font-weight:700; letter-spacing:1px;">${data.password}</p>
       </div>
-
       <p>Please change this password after logging in.</p>
       <a href="${data.loginUrl || process.env.CLIENT_URL}" class="btn">Log In Now</a>
       <p style="margin-top:16px; font-size:13px; color:#999;">If you did not request this, please contact support immediately.</p>
@@ -138,17 +132,15 @@ const templates = {
     html: wrap(`
       <h2>Your Farm is All Set! 🎉</h2>
       <p>Great job, ${data.name}! Your farm <strong>${data.farmName}</strong> has been created.</p>
-
       <div class="card">
         <p style="margin:0;"><strong>Next Steps</strong></p>
         <ul style="margin:12px 0 0;">
           <li>Add your animals to the registry</li>
           <li>Set up your fields and crops</li>
           <li>Invite your team members</li>
-          <li>Check your daily briefing every morning at 7 AM EAT</li>
+          <li>Check your daily briefing every morning at 6 AM EAT</li>
         </ul>
       </div>
-
       <a href="${data.loginUrl || process.env.CLIENT_URL}" class="btn">Start Managing Your Farm</a>
     `),
   }),
@@ -197,10 +189,10 @@ const templates = {
 
         ${data.snapshot ? `
         <hr class="divider">
-        <h3 style="margin-bottom:12px;">📊 Farm Snapshot</h3>
+        <h3 style="margin-bottom:12px;">📊 Yesterday's Production</h3>
         <div class="stats">
-          ${data.snapshot.milk ? `<div class="stat"><div class="value">${data.snapshot.milk.today}L</div><div class="label">Milk Today</div></div>` : ''}
-          ${data.snapshot.eggs ? `<div class="stat"><div class="value">${data.snapshot.eggs.today}</div><div class="label">Eggs Today</div></div>` : ''}
+          ${data.snapshot.milk ? `<div class="stat"><div class="value">${data.snapshot.milk.yesterday}L</div><div class="label">Milk Yesterday</div></div>` : ''}
+          ${data.snapshot.eggs ? `<div class="stat"><div class="value">${data.snapshot.eggs.yesterday}</div><div class="label">Eggs Yesterday</div></div>` : ''}
         </div>
         ` : ''}
 
@@ -216,7 +208,6 @@ const templates = {
     html: wrap(`
       <h2>Upcoming Reminders</h2>
       <p>You have <strong>${data.count} upcoming action${data.count > 1 ? 's' : ''}</strong> in the next 3 days on ${data.farmName}.</p>
-
       ${data.reminders.map(r => `
       <div class="card medium">
         <span class="tag tag-medium">DUE IN 3 DAYS</span>
@@ -225,7 +216,6 @@ const templates = {
         <p style="margin:4px 0 0; font-size:13px; color:#888;">Due: ${formatDate(r.dueDate)}</p>
       </div>
       `).join('')}
-
       <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/tasks" class="btn">View All Reminders</a>
     `),
   }),
@@ -235,7 +225,6 @@ const templates = {
     html: wrap(`
       <h2>Action Required Today</h2>
       <p>You have <strong>${data.count} action${data.count > 1 ? 's' : ''}</strong> that need your attention <strong>today</strong>.</p>
-
       ${data.reminders.map(r => `
       <div class="card critical">
         <span class="tag tag-critical">DUE TODAY</span>
@@ -243,7 +232,6 @@ const templates = {
         <p style="margin:4px 0 0; font-size:14px;">${r.description}</p>
       </div>
       `).join('')}
-
       <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/tasks" class="btn">Take Action Now</a>
     `),
   }),
@@ -253,14 +241,12 @@ const templates = {
     html: wrap(`
       <h2>Production Drop Detected</h2>
       <p>A significant drop in production has been detected on <strong>${data.farmName}</strong>.</p>
-
       <div class="card critical">
         <span class="tag tag-critical">ANOMALY</span>
         <strong style="display:block; margin-top:6px;">${data.animalTag}</strong>
         <p style="margin:8px 0 0;">Production dropped by <strong>${data.dropPercentage}%</strong></p>
         <p style="margin:4px 0 0; font-size:14px;">Current: ${data.currentProduction} | Average: ${data.averageProduction}</p>
       </div>
-
       <p><strong>Recommended actions:</strong></p>
       <ul>
         <li>Check the animal for signs of illness or injury</li>
@@ -268,7 +254,6 @@ const templates = {
         <li>Check for signs of mastitis (if dairy)</li>
         <li>Consult your veterinarian if the drop persists</li>
       </ul>
-
       <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/animals" class="btn">View Animal Details</a>
     `),
   }),
@@ -278,16 +263,13 @@ const templates = {
     html: wrap(`
       <h2 style="color:#c62828;">Health Emergency</h2>
       <p>A critical health event has been recorded on <strong>${data.farmName}</strong>.</p>
-
       <div class="card critical">
         <span class="tag tag-critical">${data.severity || 'CRITICAL'}</span>
         <strong style="display:block; margin-top:6px;">Animal: ${data.animalTag}</strong>
         <p style="margin:8px 0 0;"><strong>Diagnosis:</strong> ${data.diagnosis}</p>
         ${data.recommendedAction ? `<p style="margin:8px 0 0;"><strong>Action:</strong> ${data.recommendedAction}</p>` : ''}
       </div>
-
       <p style="color:#c62828;"><strong>Immediate veterinary attention is recommended.</strong></p>
-
       <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/animals" class="btn">View Health Record</a>
     `),
   }),
@@ -297,19 +279,14 @@ const templates = {
     html: wrap(`
       <h2 style="color:#d32f2f;">Extreme Weather Alert</h2>
       <p><strong>${data.weatherType}</strong> expected on <strong>${data.farmName}</strong>.</p>
-
       <div class="card critical">
         <span class="tag tag-critical">TAKE ACTION</span>
         <p style="margin:8px 0 0;"><strong>${data.message}</strong></p>
       </div>
-
       ${data.precautions ? `
       <p><strong>Recommended precautions:</strong></p>
-      <ul>
-        ${data.precautions.map(p => `<li>${p}</li>`).join('')}
-      </ul>
+      <ul>${data.precautions.map(p => `<li>${p}</li>`).join('')}</ul>
       ` : ''}
-
       <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/weather" class="btn">View Weather Details</a>
     `),
   }),
@@ -319,16 +296,13 @@ const templates = {
     html: wrap(`
       <h2>Low Stock Alert</h2>
       <p>An inventory item on <strong>${data.farmName}</strong> is running low.</p>
-
       <div class="card high">
         <span class="tag tag-high">REORDER NEEDED</span>
         <strong style="display:block; margin-top:6px;">${data.itemName}</strong>
         <p style="margin:8px 0 0;">Current stock: <strong>${data.currentStock} ${data.unit}</strong></p>
         <p style="margin:4px 0 0;">Reorder at: ${data.reorderAt} ${data.unit}</p>
       </div>
-
       <p>Please reorder soon to avoid running out.</p>
-
       <a href="${process.env.CLIENT_URL || 'http://localhost:3000'}/inventory" class="btn">Manage Inventory</a>
     `),
   }),

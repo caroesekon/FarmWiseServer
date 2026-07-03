@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const authenticateUser = require('../../middleware/client/authenticateUser');
 const farmIsolation = require('../../middleware/client/farmIsolation');
+const trialCheck = require('../../middleware/client/trialCheck');
 
 router.use('/auth', require('./authRoutes'));
 
 router.use(authenticateUser);
 router.use(farmIsolation);
+router.use(trialCheck);
 
 router.use('/farm', require('./farmRoutes'));
 router.use('/team', require('./teamRoutes'));
