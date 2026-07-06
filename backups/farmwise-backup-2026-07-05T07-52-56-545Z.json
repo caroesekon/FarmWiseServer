@@ -2,7 +2,7 @@
   "appName": "FarmWise",
   "version": "v1",
   "backupType": "full",
-  "timestamp": "2026-07-01T08:15:01.852Z",
+  "timestamp": "2026-07-05T07:52:56.545Z",
   "data": {
     "users": [
       {
@@ -19,11 +19,11 @@
           "smsAlerts": false,
           "language": "en"
         },
+        "lastLogin": "2026-07-05T05:54:17.103Z",
         "createdBy": "6a440bdf5d39635652631cd1",
         "createdAt": "2026-06-30T19:39:45.784Z",
-        "updatedAt": "2026-06-30T20:53:37.881Z",
-        "__v": 0,
-        "lastLogin": "2026-07-01T08:05:22.629Z"
+        "updatedAt": "2026-07-01T08:26:59.011Z",
+        "__v": 0
       },
       {
         "_id": "6a44432513b1e487af130109",
@@ -59,11 +59,30 @@
           "smsAlerts": false,
           "language": "en"
         },
+        "lastLogin": "2026-06-30T22:59:19.888Z",
         "createdBy": "6a440bdf5d39635652631cd1",
         "createdAt": "2026-06-30T22:58:29.799Z",
         "updatedAt": "2026-06-30T22:58:29.799Z",
-        "__v": 0,
-        "lastLogin": "2026-06-30T22:59:19.888Z"
+        "__v": 0
+      },
+      {
+        "_id": "6a48116f516498e3f3fd6630",
+        "name": "BENARD MICHIKA",
+        "email": "benardmichieka100@gmail.com",
+        "password": "$2a$12$9DY2xA9K.nxIXciSc.zGde.oenzzYbPi00J2E50VQUS9L/mtdITfa",
+        "role": "farmAdmin",
+        "farmId": "6a48116f516498e3f3fd6632",
+        "status": "active",
+        "preferences": {
+          "dailyBriefing": true,
+          "emailAlerts": true,
+          "smsAlerts": false,
+          "language": "en"
+        },
+        "createdBy": "6a44be5d90f634d6b43b2d1b",
+        "createdAt": "2026-07-03T19:45:51.142Z",
+        "updatedAt": "2026-07-03T19:45:51.143Z",
+        "__v": 0
       }
     ],
     "farms": [
@@ -79,9 +98,10 @@
           "lng": null
         },
         "sizeUnit": "acres",
+        "livestock": [],
         "crops": [],
         "status": "active",
-        "livestock": [],
+        "trialStatus": "none",
         "createdAt": "2026-06-30T19:39:46.582Z",
         "updatedAt": "2026-06-30T23:14:28.979Z",
         "__v": 0
@@ -95,11 +115,29 @@
           "subCounty": ""
         },
         "sizeUnit": "acres",
+        "livestock": [],
         "crops": [],
         "status": "active",
-        "livestock": [],
+        "trialStatus": "none",
         "createdAt": "2026-06-30T22:58:30.324Z",
         "updatedAt": "2026-06-30T22:58:30.324Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a48116f516498e3f3fd6632",
+        "name": "Bernard",
+        "owner": "6a48116f516498e3f3fd6630",
+        "location": {
+          "county": "Nyamira",
+          "subCounty": ""
+        },
+        "sizeUnit": "acres",
+        "crops": [],
+        "status": "active",
+        "trialStatus": "active",
+        "livestock": [],
+        "createdAt": "2026-07-03T19:45:51.875Z",
+        "updatedAt": "2026-07-03T19:45:51.875Z",
         "__v": 0
       }
     ],
@@ -116,13 +154,13 @@
           "unit": "kg"
         },
         "category": "poultry",
+        "batchId": "POU-LEGACY-1782856239405",
         "status": "active",
         "pen": "H1",
         "notes": "",
         "createdAt": "2026-06-30T21:28:55.512Z",
         "updatedAt": "2026-06-30T21:28:55.512Z",
-        "__v": 0,
-        "batchId": "POU-LEGACY-1782856239405"
+        "__v": 0
       },
       {
         "_id": "6a4435171201aa61371ca064",
@@ -136,13 +174,13 @@
           "unit": "kg"
         },
         "category": "poultry",
+        "batchId": "POU-LEGACY-1782856239405",
         "status": "active",
         "pen": "H1",
         "notes": "",
         "createdAt": "2026-06-30T21:28:55.513Z",
         "updatedAt": "2026-06-30T21:28:55.513Z",
-        "__v": 0,
-        "batchId": "POU-LEGACY-1782856239405"
+        "__v": 0
       },
       {
         "_id": "6a443eef32e549a25fd5fad2",
@@ -250,6 +288,104 @@
         "notes": "",
         "createdAt": "2026-06-30T22:19:57.123Z",
         "__v": 0
+      },
+      {
+        "_id": "6a44f282cdae3534a487aa62",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a443eef32e549a25fd5fad2",
+        "type": "milk",
+        "quantity": 10,
+        "unit": "L",
+        "date": "2026-07-01T00:00:00.000Z",
+        "session": "morning",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "",
+        "createdAt": "2026-07-01T10:57:06.110Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a475a34fec3d64451d45b05",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4440cf03c4cc89a9e3cbb4",
+        "type": "milk",
+        "quantity": 15,
+        "unit": "L",
+        "date": "2026-07-03T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "",
+        "createdAt": "2026-07-03T06:44:04.294Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a475a5afec3d64451d45b14",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca063",
+        "type": "eggs",
+        "quantity": 10,
+        "unit": "pcs",
+        "date": "2026-07-03T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "createdAt": "2026-07-03T06:44:42.192Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a475a5afec3d64451d45b15",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca064",
+        "type": "eggs",
+        "quantity": 10,
+        "unit": "pcs",
+        "date": "2026-07-03T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "createdAt": "2026-07-03T06:44:42.193Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a48cc3a91df6b89d826cdaf",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca063",
+        "type": "eggs",
+        "quantity": 14.5,
+        "unit": "pcs",
+        "date": "2026-07-04T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "createdAt": "2026-07-04T09:02:50.791Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a48cc3a91df6b89d826cdb0",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca064",
+        "type": "eggs",
+        "quantity": 14.5,
+        "unit": "pcs",
+        "date": "2026-07-04T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "createdAt": "2026-07-04T09:02:50.791Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a48cc6191df6b89d826cdfd",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4440cf03c4cc89a9e3cbb4",
+        "type": "milk",
+        "quantity": 20,
+        "unit": "L",
+        "date": "2026-07-04T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "",
+        "createdAt": "2026-07-04T09:03:29.233Z",
+        "__v": 0
       }
     ],
     "breeding": [
@@ -274,7 +410,23 @@
     "inventory": [],
     "equipment": [],
     "finance": [],
-    "tasks": [],
+    "tasks": [
+      {
+        "_id": "6a4516f2cdae3534a487afec",
+        "farmId": "6a441b82d018a359c4a12880",
+        "title": "Morning",
+        "description": "Morning break",
+        "category": "other",
+        "assignedBy": "6a441b81d018a359c4a1287e",
+        "dueDate": "2026-07-16T00:00:00.000Z",
+        "priority": "medium",
+        "status": "pending",
+        "completedAt": "2026-07-01T13:32:45.647Z",
+        "createdAt": "2026-07-01T13:32:34.582Z",
+        "updatedAt": "2026-07-01T13:32:56.394Z",
+        "__v": 0
+      }
+    ],
     "alerts": [],
     "notifications": [],
     "adminAccess": [
@@ -285,53 +437,69 @@
         "password": "$2a$12$v2scUqM4rscWlXROFkT02u1IBIwYnw2YVFMqdGpuQWLkK5Q21ElKG",
         "role": "superAdmin",
         "status": "active",
+        "lastLogin": "2026-07-05T07:52:43.460Z",
         "createdAt": "2026-06-30T18:33:03.982Z",
         "updatedAt": "2026-06-30T18:33:03.983Z",
-        "__v": 0,
-        "lastLogin": "2026-06-30T22:48:19.525Z"
+        "__v": 0
       }
     ],
     "systemConfig": [
       {
         "_id": "6a4449c11ae171a114e33c99",
         "key": "platformName",
-        "__v": 0,
-        "updatedAt": "2026-06-30T22:57:05.569Z",
+        "value": "FarmWise",
         "updatedBy": "davismcintyre5@gmail.com",
-        "value": "FarmWise"
+        "updatedAt": "2026-07-03T19:46:09.703Z",
+        "__v": 0
       },
       {
         "_id": "6a44cc7e793d706a37e2b09b",
         "key": "backupConfig",
-        "__v": 0,
-        "updatedAt": "2026-07-01T08:14:54.570Z",
-        "updatedBy": "davismcintyre5@gmail.com",
         "value": {
           "frequency": "weekly",
           "maxFiles": 30,
           "autoEmail": false,
           "email": ""
-        }
+        },
+        "updatedBy": "davismcintyre5@gmail.com",
+        "updatedAt": "2026-07-03T19:46:10.246Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a47a54656619c4a2d441f3b",
+        "key": "supportEmail",
+        "value": "davismcintyre5@gmail.com",
+        "updatedBy": "davismcintyre5@gmail.com",
+        "updatedAt": "2026-07-03T19:46:10.336Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a47a54656619c4a2d441f3c",
+        "key": "supportPhone",
+        "value": "0768784909",
+        "updatedBy": "davismcintyre5@gmail.com",
+        "updatedAt": "2026-07-03T19:46:10.426Z",
+        "__v": 0
       }
     ]
   },
   "stats": {
-    "totalUsers": 3,
-    "totalFarms": 2,
+    "totalUsers": 4,
+    "totalFarms": 3,
     "totalAnimals": 4,
     "totalHealthRecords": 0,
     "totalVaccinations": 1,
-    "totalProduction": 3,
+    "totalProduction": 10,
     "totalBreeding": 1,
     "totalFields": 0,
     "totalCrops": 0,
     "totalInventory": 0,
     "totalEquipment": 0,
     "totalFinance": 0,
-    "totalTasks": 0,
+    "totalTasks": 1,
     "totalAlerts": 0,
     "totalNotifications": 0,
     "totalAdminAccess": 1,
-    "totalSystemConfig": 2
+    "totalSystemConfig": 4
   }
 }

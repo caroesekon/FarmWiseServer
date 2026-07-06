@@ -62,10 +62,7 @@ const getHealthRecords = async (req, res) => {
     });
   } catch (error) {
     logger.error('[Client Health] Get records failed', { error: error.message });
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch health records.',
-    });
+    res.status(500).json({ success: false, message: 'Failed to fetch health records.' });
   }
 };
 
@@ -74,37 +71,17 @@ const getHealthRecords = async (req, res) => {
 // @access  Private (farmAdmin, manager, vet)
 const addHealthRecord = async (req, res) => {
   try {
-    const {
-      animalId,
-      batchId,
-      type,
-      diagnosis,
-      symptoms,
-      treatment,
-      medication,
-      vetName,
-      vetContact,
-      cost,
-      date,
-      severity,
-      notes,
-    } = req.body;
+    const { animalId, batchId, type, diagnosis, symptoms, treatment, medication, vetName, vetContact, cost, date, severity, notes } = req.body;
 
     if (!type) {
-      return res.status(400).json({
-        success: false,
-        message: 'Record type is required.',
-      });
+      return res.status(400).json({ success: false, message: 'Record type is required.' });
     }
 
     if (batchId) {
       const animals = await Animal.find({ farmId: req.farmId, batchId, status: 'active' });
 
       if (animals.length === 0) {
-        return res.status(404).json({
-          success: false,
-          message: 'No active animals found in this batch.',
-        });
+        return res.status(404).json({ success: false, message: 'No active animals found in this batch.' });
       }
 
       const records = await HealthRecord.insertMany(
@@ -131,31 +108,20 @@ const addHealthRecord = async (req, res) => {
           farmId: req.farmId,
           type: 'health',
           title: `${severity === 'critical' ? 'Critical' : 'Severe'} Health Event — Batch`,
-          description: `Batch ${batchId}: ${diagnosis || type}. ${animals.length} animals affected. Immediate attention required.`,
+          description: `Batch ${batchId}: ${diagnosis || type}. ${animals.length} animals affected.`,
           level: severity === 'critical' ? 'critical' : 'high',
           animalIds: animals.map((a) => a._id),
           referenceId: records[0]._id,
         });
       }
 
-      logger.info('[Client Health] Batch records added', {
-        farmId: req.farmId,
-        batchId,
-        count: records.length,
-      });
+      logger.info('[Client Health] Batch records added', { farmId: req.farmId, batchId, count: records.length });
 
-      return res.status(201).json({
-        success: true,
-        message: `Health record added for ${records.length} animals.`,
-        data: { count: records.length, batchId },
-      });
+      return res.status(201).json({ success: true, message: `Health record added for ${records.length} animals.`, data: { count: records.length, batchId } });
     }
 
     if (!animalId) {
-      return res.status(400).json({
-        success: false,
-        message: 'Animal ID or Batch ID is required.',
-      });
+      return res.status(400).json({ success: false, message: 'Animal ID or Batch ID is required.' });
     }
 
     const record = await HealthRecord.create({
@@ -187,26 +153,71 @@ const addHealthRecord = async (req, res) => {
       });
     }
 
-    logger.info('[Client Health] Record added', {
-      recordId: record._id,
-      farmId: req.farmId,
-      animalId,
-    });
+    logger.info('[Client Health] Record added', { recordId: record._id, farmId: req.farmId, animalId });
 
-    res.status(201).json({
-      success: true,
-      data: record,
-    });
+    res.status(201).json({ success: true, data: record });
   } catch (error) {
     logger.error('[Client Health] Add record failed', { error: error.message });
-    res.status(500).json({
-      success: false,
-      message: 'Failed to add health record.',
-    });
+    res.status(500).json({ success: false, message: 'Failed to add health record.' });
   }
 };
 
-module.exports = {
-  getHealthRecords,
-  addHealthRecord,
+// @desc    Update health record
+// @route   PUT /api/health/:id
+// @access  Private (farmAdmin, manager, vet)
+const updateHealthRecord = async (req, res) => {
+  try {
+    const record = await HealthRecord.findOne({ _id: req.params.id, farmId: req.farmId });
+
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Health record not found.' });
+    }
+
+    const { type, diagnosis, symptoms, treatment, medication, vetName, vetContact, cost, date, severity, outcome, notes } = req.body;
+
+    if (type) record.type = type;
+    if (diagnosis) record.diagnosis = diagnosis;
+    if (symptoms) record.symptoms = symptoms;
+    if (treatment) record.treatment = treatment;
+    if (medication) record.medication = medication;
+    if (vetName) record.vetName = vetName;
+    if (vetContact) record.vetContact = vetContact;
+    if (cost !== undefined) record.cost = cost;
+    if (date) record.date = date;
+    if (severity) record.severity = severity;
+    if (outcome) record.outcome = outcome;
+    if (notes !== undefined) record.notes = notes;
+    record.updatedAt = new Date();
+
+    await record.save();
+
+    logger.info('[Client Health] Record updated', { recordId: record._id });
+
+    res.status(200).json({ success: true, data: record });
+  } catch (error) {
+    logger.error('[Client Health] Update record failed', { error: error.message });
+    res.status(500).json({ success: false, message: 'Failed to update health record.' });
+  }
 };
+
+// @desc    Delete health record
+// @route   DELETE /api/health/:id
+// @access  Private (farmAdmin only)
+const deleteHealthRecord = async (req, res) => {
+  try {
+    const record = await HealthRecord.findOneAndDelete({ _id: req.params.id, farmId: req.farmId });
+
+    if (!record) {
+      return res.status(404).json({ success: false, message: 'Health record not found.' });
+    }
+
+    logger.info('[Client Health] Record deleted', { recordId: record._id });
+
+    res.status(200).json({ success: true, message: 'Health record deleted.' });
+  } catch (error) {
+    logger.error('[Client Health] Delete record failed', { error: error.message });
+    res.status(500).json({ success: false, message: 'Failed to delete health record.' });
+  }
+};
+
+module.exports = { getHealthRecords, addHealthRecord, updateHealthRecord, deleteHealthRecord };

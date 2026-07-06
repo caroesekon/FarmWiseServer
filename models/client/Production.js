@@ -46,6 +46,10 @@ const productionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  value: {
+    type: Number,
+    default: 0,
+  },
 });
 
 productionSchema.index({ farmId: 1, date: -1 });

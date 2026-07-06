@@ -9,9 +9,7 @@ const logger = require('../../utils/logger');
 const getVaccinations = async (req, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
-
     const query = { farmId: req.farmId };
-
     if (status) query.status = status;
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -24,20 +22,10 @@ const getVaccinations = async (req, res) => {
 
     const total = await Vaccination.countDocuments(query);
 
-    res.status(200).json({
-      success: true,
-      count: vaccinations.length,
-      total,
-      totalPages: Math.ceil(total / parseInt(limit)),
-      currentPage: parseInt(page),
-      data: vaccinations,
-    });
+    res.status(200).json({ success: true, count: vaccinations.length, total, totalPages: Math.ceil(total / parseInt(limit)), currentPage: parseInt(page), data: vaccinations });
   } catch (error) {
     logger.error('[Client Vaccination] Get failed', { error: error.message });
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch vaccinations.',
-    });
+    res.status(500).json({ success: false, message: 'Failed to fetch vaccinations.' });
   }
 };
 
@@ -46,22 +34,11 @@ const getVaccinations = async (req, res) => {
 // @access  Private (all client roles)
 const getVets = async (req, res) => {
   try {
-    const vets = await User.find({
-      farmId: req.farmId,
-      role: 'vet',
-      status: 'active',
-    }).select('name email phone');
-
-    res.status(200).json({
-      success: true,
-      data: vets,
-    });
+    const vets = await User.find({ farmId: req.farmId, role: 'vet', status: 'active' }).select('name email phone');
+    res.status(200).json({ success: true, data: vets });
   } catch (error) {
     logger.error('[Client Vaccination] Get vets failed', { error: error.message });
-    res.status(500).json({
-      success: false,
-      message: 'Failed to fetch vets.',
-    });
+    res.status(500).json({ success: false, message: 'Failed to fetch vets.' });
   }
 };
 
@@ -73,10 +50,7 @@ const scheduleVaccination = async (req, res) => {
     const { vaccineName, batchNumber, animalIds, dueDate, vetId, notes } = req.body;
 
     if (!vaccineName || !animalIds || !dueDate) {
-      return res.status(400).json({
-        success: false,
-        message: 'Vaccine name, animal IDs, and due date are required.',
-      });
+      return res.status(400).json({ success: false, message: 'Vaccine name, animal IDs, and due date are required.' });
     }
 
     let vetName = '';
@@ -104,34 +78,53 @@ const scheduleVaccination = async (req, res) => {
         await emailService.send({
           to: vet.email,
           template: 'reminderUpcoming',
-          data: {
-            farmName: req.farmId,
-            reminders: [{
-              title: `Vaccination Scheduled: ${vaccineName}`,
-              description: `${animalIds.length} animal(s) due on ${new Date(dueDate).toLocaleDateString('en-KE')}. ${notes || ''}`,
-              dueDate,
-            }],
-            count: 1,
-          },
+          data: { farmName: req.farmId, reminders: [{ title: `Vaccination Scheduled: ${vaccineName}`, description: `${animalIds.length} animal(s) due on ${new Date(dueDate).toLocaleDateString('en-KE')}.`, dueDate }], count: 1 },
         });
       }
     }
 
-    logger.info('[Client Vaccination] Scheduled', {
-      vaccinationId: vaccination._id,
-      farmId: req.farmId,
-    });
-
-    res.status(201).json({
-      success: true,
-      data: vaccination,
-    });
+    logger.info('[Client Vaccination] Scheduled', { vaccinationId: vaccination._id });
+    res.status(201).json({ success: true, data: vaccination });
   } catch (error) {
     logger.error('[Client Vaccination] Schedule failed', { error: error.message });
-    res.status(500).json({
-      success: false,
-      message: 'Failed to schedule vaccination.',
-    });
+    res.status(500).json({ success: false, message: 'Failed to schedule vaccination.' });
+  }
+};
+
+// @desc    Update vaccination
+// @route   PUT /api/vaccinations/:id
+// @access  Private (farmAdmin, manager, vet)
+const updateVaccination = async (req, res) => {
+  try {
+    const vaccination = await Vaccination.findOne({ _id: req.params.id, farmId: req.farmId });
+
+    if (!vaccination) {
+      return res.status(404).json({ success: false, message: 'Vaccination record not found.' });
+    }
+
+    const { vaccineName, batchNumber, animalIds, dueDate, vetId, notes } = req.body;
+
+    if (vaccineName) vaccination.vaccineName = vaccineName;
+    if (batchNumber) vaccination.batchNumber = batchNumber;
+    if (animalIds) {
+      vaccination.animalIds = animalIds;
+      vaccination.animalCount = animalIds.length;
+    }
+    if (dueDate) vaccination.dueDate = dueDate;
+    if (vetId !== undefined) {
+      vaccination.vetId = vetId || undefined;
+      vaccination.vetName = vetId ? (await User.findById(vetId))?.name || '' : '';
+    }
+    if (notes !== undefined) vaccination.notes = notes;
+    vaccination.updatedAt = new Date();
+
+    await vaccination.save();
+
+    logger.info('[Client Vaccination] Updated', { vaccinationId: vaccination._id });
+    res.status(200).json({ success: true, data: vaccination });
+  } catch (error) {
+    logger.error('[Client Vaccination] Update failed', { error: error.message });
+    res.status(500).json({ success: false, message: 'Failed to update vaccination.' });
   }
 };
 
@@ -142,16 +135,10 @@ const completeVaccination = async (req, res) => {
   try {
     const { administeredBy, notes } = req.body;
 
-    const vaccination = await Vaccination.findOne({
-      _id: req.params.id,
-      farmId: req.farmId,
-    });
+    const vaccination = await Vaccination.findOne({ _id: req.params.id, farmId: req.farmId });
 
     if (!vaccination) {
-      return res.status(404).json({
-        success: false,
-        message: 'Vaccination record not found.',
-      });
+      return res.status(404).json({ success: false, message: 'Vaccination record not found.' });
     }
 
     vaccination.status = 'completed';
@@ -159,27 +146,33 @@ const completeVaccination = async (req, res) => {
     vaccination.administeredBy = administeredBy || req.user.name;
     vaccination.notes = notes || vaccination.notes;
     vaccination.updatedAt = new Date();
-
     await vaccination.save();
 
     logger.info('[Client Vaccination] Completed', { vaccinationId: vaccination._id });
-
-    res.status(200).json({
-      success: true,
-      data: vaccination,
-    });
+    res.status(200).json({ success: true, data: vaccination });
   } catch (error) {
     logger.error('[Client Vaccination] Complete failed', { error: error.message });
-    res.status(500).json({
-      success: false,
-      message: 'Failed to complete vaccination.',
-    });
+    res.status(500).json({ success: false, message: 'Failed to complete vaccination.' });
   }
 };
 
-module.exports = {
-  getVaccinations,
-  getVets,
-  scheduleVaccination,
-  completeVaccination,
+// @desc    Delete vaccination
+// @route   DELETE /api/vaccinations/:id
+// @access  Private (farmAdmin only)
+const deleteVaccination = async (req, res) => {
+  try {
+    const vaccination = await Vaccination.findOneAndDelete({ _id: req.params.id, farmId: req.farmId });
+
+    if (!vaccination) {
+      return res.status(404).json({ success: false, message: 'Vaccination record not found.' });
+    }
+
+    logger.info('[Client Vaccination] Deleted', { vaccinationId: vaccination._id });
+    res.status(200).json({ success: true, message: 'Vaccination deleted.' });
+  } catch (error) {
+    logger.error('[Client Vaccination] Delete failed', { error: error.message });
+    res.status(500).json({ success: false, message: 'Failed to delete vaccination.' });
+  }
 };
+
+module.exports = { getVaccinations, getVets, scheduleVaccination, updateVaccination, completeVaccination, deleteVaccination };
