@@ -133,6 +133,27 @@ app.get('/api/support', async (req, res) => {
     });
   }
 });
+
+app.get('/api/downloads', async (req, res) => {
+  try {
+    const SystemConfig = require('./models/admin/SystemConfig');
+    const config = await SystemConfig.findOne({ key: 'downloads' });
+    const downloads = config?.value || { windows: { enabled: false }, android: { enabled: false } };
+
+    const result = {};
+    if (downloads.windows?.enabled) {
+      result.windows = { url: downloads.windows.url, version: downloads.windows.version };
+    }
+    if (downloads.android?.enabled) {
+      result.android = { url: downloads.android.url, version: downloads.android.version };
+    }
+
+    res.status(200).json({ success: true, data: result });
+  } catch {
+    res.status(200).json({ success: true, data: {} });
+  }
+});
+
 app.use('/api/admin', require('./routes/admin/index'));
 app.use('/api', require('./routes/client/index'));
 

@@ -2,7 +2,7 @@
   "appName": "FarmWise",
   "version": "v1",
   "backupType": "full",
-  "timestamp": "2026-07-05T07:52:56.545Z",
+  "timestamp": "2026-07-07T04:57:56.766Z",
   "data": {
     "users": [
       {
@@ -19,11 +19,30 @@
           "smsAlerts": false,
           "language": "en"
         },
-        "lastLogin": "2026-07-05T05:54:17.103Z",
+        "lastLogin": "2026-07-06T13:21:22.887Z",
         "createdBy": "6a440bdf5d39635652631cd1",
         "createdAt": "2026-06-30T19:39:45.784Z",
         "updatedAt": "2026-07-01T08:26:59.011Z",
-        "__v": 0
+        "__v": 0,
+        "permissions": {
+          "dashboard": true,
+          "livestock": true,
+          "production": true,
+          "tasks": true,
+          "finance": true,
+          "reports": true,
+          "team": true,
+          "settings": true,
+          "backups": true,
+          "health": true,
+          "breeding": true,
+          "vaccination": true,
+          "inventory": true,
+          "equipment": true,
+          "fields": true,
+          "weather": true,
+          "aiChat": true
+        }
       },
       {
         "_id": "6a44432513b1e487af130109",
@@ -43,35 +62,34 @@
         "createdBy": "6a441b81d018a359c4a1287e",
         "createdAt": "2026-06-30T22:28:53.354Z",
         "updatedAt": "2026-06-30T22:28:53.354Z",
-        "__v": 0
+        "__v": 0,
+        "permissions": {
+          "dashboard": true,
+          "livestock": true,
+          "production": false,
+          "tasks": false,
+          "finance": false,
+          "reports": false,
+          "team": false,
+          "settings": false,
+          "backups": false,
+          "health": true,
+          "breeding": true,
+          "vaccination": true,
+          "inventory": false,
+          "equipment": false,
+          "fields": false,
+          "weather": true,
+          "aiChat": true
+        }
       },
       {
-        "_id": "6a444a15475ea2569311abf8",
-        "name": "DH",
-        "email": "davixhdm@gmail.com",
-        "password": "$2a$12$Zgri0YNd6xdMnI6wAG5ayutoeXpIZjyxegDJl4hi4XJAMsErO.sCO",
-        "role": "farmAdmin",
-        "farmId": "6a444a16475ea2569311abfa",
-        "status": "active",
-        "preferences": {
-          "dailyBriefing": true,
-          "emailAlerts": true,
-          "smsAlerts": false,
-          "language": "en"
-        },
-        "lastLogin": "2026-06-30T22:59:19.888Z",
-        "createdBy": "6a440bdf5d39635652631cd1",
-        "createdAt": "2026-06-30T22:58:29.799Z",
-        "updatedAt": "2026-06-30T22:58:29.799Z",
-        "__v": 0
-      },
-      {
-        "_id": "6a48116f516498e3f3fd6630",
-        "name": "BENARD MICHIKA",
+        "_id": "6a4a3d34a42d7e11c277fa37",
+        "name": "BENARD MICHIEKA",
         "email": "benardmichieka100@gmail.com",
-        "password": "$2a$12$9DY2xA9K.nxIXciSc.zGde.oenzzYbPi00J2E50VQUS9L/mtdITfa",
+        "password": "$2a$12$ln2UFxJAtTQX9cSLh.tRXOb9yy2jdQCS1yV3ySd6c5sPeo9Q8.GpS",
         "role": "farmAdmin",
-        "farmId": "6a48116f516498e3f3fd6632",
+        "farmId": "6a4a3d35a42d7e11c277fa39",
         "status": "active",
         "preferences": {
           "dailyBriefing": true,
@@ -79,10 +97,50 @@
           "smsAlerts": false,
           "language": "en"
         },
-        "createdBy": "6a44be5d90f634d6b43b2d1b",
-        "createdAt": "2026-07-03T19:45:51.142Z",
-        "updatedAt": "2026-07-03T19:45:51.143Z",
-        "__v": 0
+        "createdBy": "6a440bdf5d39635652631cd1",
+        "createdAt": "2026-07-05T11:17:08.399Z",
+        "updatedAt": "2026-07-05T11:17:08.399Z",
+        "__v": 0,
+        "permissions": {
+          "dashboard": true,
+          "livestock": true,
+          "production": true,
+          "tasks": true,
+          "finance": true,
+          "reports": true,
+          "team": true,
+          "settings": true,
+          "backups": true,
+          "health": true,
+          "breeding": true,
+          "vaccination": true,
+          "inventory": true,
+          "equipment": true,
+          "fields": true,
+          "weather": true,
+          "aiChat": true
+        }
+      },
+      {
+        "_id": "6a4bad5f5a78c2e6c51bf1a7",
+        "name": "jj",
+        "email": "davixhdm@gmail.com",
+        "phone": "+254799999999",
+        "password": "$2a$12$T3pQVcqeumk2me4nzv7YoOJuvjgphrxolUB74oT5ObRdAoN/EJR1S",
+        "role": "worker",
+        "farmId": "6a441b82d018a359c4a12880",
+        "status": "active",
+        "preferences": {
+          "dailyBriefing": true,
+          "emailAlerts": true,
+          "smsAlerts": false,
+          "language": "en"
+        },
+        "createdBy": "6a441b81d018a359c4a1287e",
+        "createdAt": "2026-07-06T13:27:59.256Z",
+        "updatedAt": "2026-07-06T13:35:54.529Z",
+        "__v": 0,
+        "lastLogin": "2026-07-06T13:29:34.238Z"
       }
     ],
     "farms": [
@@ -103,8 +161,31 @@
         "status": "active",
         "trialStatus": "none",
         "createdAt": "2026-06-30T19:39:46.582Z",
-        "updatedAt": "2026-06-30T23:14:28.979Z",
-        "__v": 0
+        "updatedAt": "2026-07-06T12:26:43.777Z",
+        "__v": 4,
+        "productPrices": [
+          {
+            "name": "Milk per Litre",
+            "category": "animal",
+            "price": 70,
+            "unit": "L",
+            "_id": "6a4b9f0315bb5f78a7884202"
+          },
+          {
+            "name": "Eggs per Tray",
+            "category": "animal",
+            "price": 0,
+            "unit": "tray",
+            "_id": "6a4b9f0315bb5f78a7884203"
+          },
+          {
+            "name": "Eggs per Piece",
+            "category": "animal",
+            "price": 20,
+            "unit": "pcs",
+            "_id": "6a4b9f0315bb5f78a7884204"
+          }
+        ]
       },
       {
         "_id": "6a444a16475ea2569311abfa",
@@ -121,24 +202,28 @@
         "trialStatus": "none",
         "createdAt": "2026-06-30T22:58:30.324Z",
         "updatedAt": "2026-06-30T22:58:30.324Z",
-        "__v": 0
+        "__v": 1,
+        "productPrices": []
       },
       {
-        "_id": "6a48116f516498e3f3fd6632",
-        "name": "Bernard",
-        "owner": "6a48116f516498e3f3fd6630",
+        "_id": "6a4a3d35a42d7e11c277fa39",
+        "name": "BENARD",
+        "owner": "6a4a3d34a42d7e11c277fa37",
         "location": {
-          "county": "Nyamira",
+          "county": "NYAMIRA",
           "subCounty": ""
         },
         "sizeUnit": "acres",
         "crops": [],
         "status": "active",
-        "trialStatus": "active",
+        "trialStatus": "trial",
         "livestock": [],
-        "createdAt": "2026-07-03T19:45:51.875Z",
-        "updatedAt": "2026-07-03T19:45:51.875Z",
-        "__v": 0
+        "createdAt": "2026-07-05T11:17:09.155Z",
+        "updatedAt": "2026-07-05T11:17:09.155Z",
+        "__v": 1,
+        "trialEndsAt": "2026-07-19T11:17:09.168Z",
+        "trialStartsAt": "2026-07-05T11:17:09.168Z",
+        "productPrices": []
       }
     ],
     "animals": [
@@ -239,11 +324,12 @@
         "animalCount": 3,
         "dueDate": "2026-07-03T00:00:00.000Z",
         "notes": "",
-        "status": "pending",
+        "status": "completed",
         "recordedBy": "6a441b81d018a359c4a1287e",
         "createdAt": "2026-06-30T21:34:39.792Z",
-        "updatedAt": "2026-06-30T21:34:39.792Z",
-        "__v": 0
+        "updatedAt": "2026-07-06T11:57:00.421Z",
+        "__v": 0,
+        "completedDate": "2026-07-06T11:57:00.421Z"
       }
     ],
     "production": [
@@ -259,7 +345,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "Batch: POU-LEGACY-1782856239405",
         "createdAt": "2026-06-30T22:00:31.617Z",
-        "__v": 0
+        "__v": 0,
+        "value": 20
       },
       {
         "_id": "6a443c7f3efdc6ce5d9a93b6",
@@ -273,7 +360,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "Batch: POU-LEGACY-1782856239405",
         "createdAt": "2026-06-30T22:00:31.617Z",
-        "__v": 0
+        "__v": 0,
+        "value": 20
       },
       {
         "_id": "6a44410d03c4cc89a9e3cbde",
@@ -287,7 +375,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "",
         "createdAt": "2026-06-30T22:19:57.123Z",
-        "__v": 0
+        "__v": 0,
+        "value": 2800
       },
       {
         "_id": "6a44f282cdae3534a487aa62",
@@ -301,7 +390,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "",
         "createdAt": "2026-07-01T10:57:06.110Z",
-        "__v": 0
+        "__v": 0,
+        "value": 700
       },
       {
         "_id": "6a475a34fec3d64451d45b05",
@@ -315,7 +405,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "",
         "createdAt": "2026-07-03T06:44:04.294Z",
-        "__v": 0
+        "__v": 0,
+        "value": 1050
       },
       {
         "_id": "6a475a5afec3d64451d45b14",
@@ -329,7 +420,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "Batch: POU-LEGACY-1782856239405",
         "createdAt": "2026-07-03T06:44:42.192Z",
-        "__v": 0
+        "__v": 0,
+        "value": 200
       },
       {
         "_id": "6a475a5afec3d64451d45b15",
@@ -343,7 +435,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "Batch: POU-LEGACY-1782856239405",
         "createdAt": "2026-07-03T06:44:42.193Z",
-        "__v": 0
+        "__v": 0,
+        "value": 200
       },
       {
         "_id": "6a48cc3a91df6b89d826cdaf",
@@ -357,7 +450,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "Batch: POU-LEGACY-1782856239405",
         "createdAt": "2026-07-04T09:02:50.791Z",
-        "__v": 0
+        "__v": 0,
+        "value": 290
       },
       {
         "_id": "6a48cc3a91df6b89d826cdb0",
@@ -371,7 +465,8 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "Batch: POU-LEGACY-1782856239405",
         "createdAt": "2026-07-04T09:02:50.791Z",
-        "__v": 0
+        "__v": 0,
+        "value": 290
       },
       {
         "_id": "6a48cc6191df6b89d826cdfd",
@@ -385,6 +480,145 @@
         "recordedBy": "6a441b81d018a359c4a1287e",
         "notes": "",
         "createdAt": "2026-07-04T09:03:29.233Z",
+        "__v": 0,
+        "value": 1400
+      },
+      {
+        "_id": "6a4a1c6949658417099387b5",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4440cf03c4cc89a9e3cbb4",
+        "type": "milk",
+        "quantity": 12,
+        "unit": "L",
+        "date": "2026-07-05T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "",
+        "createdAt": "2026-07-05T08:57:13.406Z",
+        "__v": 0,
+        "value": 840
+      },
+      {
+        "_id": "6a4a1c7e49658417099387c9",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca063",
+        "type": "eggs",
+        "quantity": 13.5,
+        "unit": "pcs",
+        "date": "2026-07-05T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "createdAt": "2026-07-05T08:57:34.732Z",
+        "__v": 0,
+        "value": 270
+      },
+      {
+        "_id": "6a4a1c7e49658417099387ca",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca064",
+        "type": "eggs",
+        "quantity": 13.5,
+        "unit": "pcs",
+        "date": "2026-07-05T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "createdAt": "2026-07-05T08:57:34.733Z",
+        "__v": 0,
+        "value": 270
+      },
+      {
+        "_id": "6a4b83a4eb73db56ffc05504",
+        "farmId": "6a441b82d018a359c4a12880",
+        "category": "animal",
+        "type": "milk",
+        "quantity": 10,
+        "unit": "L",
+        "pricePerUnit": 70,
+        "totalValue": 700,
+        "animalId": "6a4440cf03c4cc89a9e3cbb4",
+        "date": "2026-07-06T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "createdAt": "2026-07-06T10:29:56.544Z",
+        "updatedAt": "2026-07-06T10:29:56.544Z",
+        "__v": 0,
+        "value": 700
+      },
+      {
+        "_id": "6a4b9c21220646cdc0cd7786",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca063",
+        "type": "eggs",
+        "quantity": 10,
+        "unit": "pcs",
+        "date": "2026-07-06T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "value": 200,
+        "createdAt": "2026-07-06T12:14:25.231Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a4b9c21220646cdc0cd7787",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca064",
+        "type": "eggs",
+        "quantity": 10,
+        "unit": "pcs",
+        "date": "2026-07-06T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "value": 200,
+        "createdAt": "2026-07-06T12:14:25.231Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a4ba02815bb5f78a78842bb",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca063",
+        "type": "eggs",
+        "quantity": 1,
+        "unit": "pcs",
+        "date": "2026-07-06T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "value": 20,
+        "createdAt": "2026-07-06T12:31:36.851Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a4ba02815bb5f78a78842bc",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4435171201aa61371ca064",
+        "type": "eggs",
+        "quantity": 1,
+        "unit": "pcs",
+        "date": "2026-07-06T00:00:00.000Z",
+        "session": "single",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "Batch: POU-LEGACY-1782856239405",
+        "value": 20,
+        "createdAt": "2026-07-06T12:31:36.851Z",
+        "__v": 0
+      },
+      {
+        "_id": "6a4ba10ac756c84e4ff4390c",
+        "farmId": "6a441b82d018a359c4a12880",
+        "animalId": "6a4440cf03c4cc89a9e3cbb4",
+        "type": "milk",
+        "quantity": 10,
+        "unit": "L",
+        "date": "2026-07-06T00:00:00.000Z",
+        "session": "afternoon",
+        "recordedBy": "6a441b81d018a359c4a1287e",
+        "notes": "",
+        "value": 700,
+        "createdAt": "2026-07-06T12:35:22.191Z",
         "__v": 0
       }
     ],
@@ -401,8 +635,9 @@
         "status": "pending",
         "recordedBy": "6a441b81d018a359c4a1287e",
         "createdAt": "2026-06-30T22:33:53.147Z",
-        "updatedAt": "2026-06-30T22:33:53.147Z",
-        "__v": 0
+        "updatedAt": "2026-07-06T11:59:07.520Z",
+        "__v": 0,
+        "notes": ""
       }
     ],
     "fields": [],
@@ -427,7 +662,44 @@
         "__v": 0
       }
     ],
-    "alerts": [],
+    "alerts": [
+      {
+        "_id": "6a4b83a4eb73db56ffc05508",
+        "farmId": "6a441b82d018a359c4a12880",
+        "type": "production_drop",
+        "title": "Production Drop Detected",
+        "description": "A-102 dropped by 48% (10 vs avg 19.4)",
+        "level": "high",
+        "dueDate": "2026-07-06T10:29:56.603Z",
+        "animalIds": [
+          "6a4440cf03c4cc89a9e3cbb4"
+        ],
+        "status": "acknowledged",
+        "createdAt": "2026-07-06T10:29:56.605Z",
+        "updatedAt": "2026-07-06T13:37:32.021Z",
+        "__v": 0,
+        "acknowledgedAt": "2026-07-06T13:37:32.021Z",
+        "acknowledgedBy": "6a441b81d018a359c4a1287e"
+      },
+      {
+        "_id": "6a4ba10ac756c84e4ff43910",
+        "farmId": "6a441b82d018a359c4a12880",
+        "type": "production_drop",
+        "title": "Production Drop Detected",
+        "description": "A-102 dropped by 44% (10 vs avg 17.8)",
+        "level": "high",
+        "dueDate": "2026-07-06T12:35:22.223Z",
+        "animalIds": [
+          "6a4440cf03c4cc89a9e3cbb4"
+        ],
+        "status": "acknowledged",
+        "createdAt": "2026-07-06T12:35:22.225Z",
+        "updatedAt": "2026-07-06T13:37:30.597Z",
+        "__v": 0,
+        "acknowledgedAt": "2026-07-06T13:37:30.597Z",
+        "acknowledgedBy": "6a441b81d018a359c4a1287e"
+      }
+    ],
     "notifications": [],
     "adminAccess": [
       {
@@ -489,7 +761,7 @@
     "totalAnimals": 4,
     "totalHealthRecords": 0,
     "totalVaccinations": 1,
-    "totalProduction": 10,
+    "totalProduction": 19,
     "totalBreeding": 1,
     "totalFields": 0,
     "totalCrops": 0,
@@ -497,7 +769,7 @@
     "totalEquipment": 0,
     "totalFinance": 0,
     "totalTasks": 1,
-    "totalAlerts": 0,
+    "totalAlerts": 2,
     "totalNotifications": 0,
     "totalAdminAccess": 1,
     "totalSystemConfig": 4
